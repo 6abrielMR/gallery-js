@@ -8,11 +8,21 @@ let mc = CreateMainContent();
 let df = document.createDocumentFragment();
 
 let previewImage = document.createElement("img");
+previewImage.style.position = "absolute";
+previewImage.style.top = "0";
+previewImage.style.left = "0";
+previewImage.style.right = "0";
+previewImage.style.bottom = "0";
+previewImage.style.margin = "auto";
+
+let contentCloseImage = document.createElement("div");
+contentCloseImage.style.width = "100%";
+contentCloseImage.style.height = "100%";
+contentCloseImage.onclick = CloseImage;
 
 let fade = document.createElement("div");
 fade.style.display = "flex";
-fade.style.justifyContent = "center";
-fade.style.alignItems = "center";
+fade.style.flexDirection = "column";
 fade.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
 fade.style.position = "fixed";
 fade.style.pointerEvents = "none";
@@ -22,8 +32,8 @@ fade.style.left = "0";
 fade.style.height = "100vh";
 fade.style.width = "100vw";
 fade.style.transition = "opacity 0.3s ease";
-fade.onclick = CloseImage;
 fade.appendChild(previewImage);
+fade.appendChild(contentCloseImage);
 
 document.body.appendChild(fade);
 
