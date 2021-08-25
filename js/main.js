@@ -1,9 +1,31 @@
 let mainClass = "galleryjs";
+let imgToLoad = document.getElementById("imgToLoad");
+imgToLoad.style.display = "none";
 
 // Se obtienen todas las imagenes con la clase 'galleryjs'
 let imgs = document.querySelectorAll(`.${mainClass}`);
 let mc = CreateMainContent();
 let df = document.createDocumentFragment();
+
+let previewImage = document.createElement("img");
+
+let fade = document.createElement("div");
+fade.style.display = "flex";
+fade.style.justifyContent = "center";
+fade.style.alignItems = "center";
+fade.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+fade.style.position = "fixed";
+fade.style.pointerEvents = "none";
+fade.style.opacity = "0";
+fade.style.top = "0";
+fade.style.left = "0";
+fade.style.height = "100vh";
+fade.style.width = "100vw";
+fade.style.transition = "opacity 0.3s ease";
+fade.onclick = CloseImage;
+fade.appendChild(previewImage);
+
+document.body.appendChild(fade);
 
 function CreateMainContent() {
     let mainContent = document.createElement("div");
@@ -20,10 +42,8 @@ function SelectImage(srcLength) {
     let min = 1;
     let max = srcLength;
     let firstRandomNumber = Math.round(Math.random()*(max-min)+min);
-    console.log('Primer numero: ' + firstRandomNumber);
     max += firstRandomNumber;
     let magicRandomNumber = Math.round(Math.random()*(max-min)+min);
-    console.log('Numero maximo: ' + max);
     if (magicRandomNumber >= srcLength && magicRandomNumber <= max) {
         if (magicRandomNumber % 2 == 0) {
             return 2;
@@ -35,6 +55,12 @@ function SelectImage(srcLength) {
     }
 }
 
+function CloseImage(event) {
+    imgToLoad.value = "";
+    fade.style.pointerEvents = "none";
+    fade.style.opacity = "0";
+}
+
 // Modificar el tamaño para todas las imagenes
 imgs.forEach(img => {
     let ci = document.createElement("div");
@@ -44,8 +70,15 @@ imgs.forEach(img => {
     img.style.height = "100%";
     img.style.objectFit = "cover";
     img.style.borderRadius = "20px";
-    
+
     ci.appendChild(img);
+
+    img.onclick = function (event) {
+        imgToLoad.value = img.getAttribute("src");
+        previewImage.src = imgToLoad.value;
+        fade.style.pointerEvents = "auto";
+        fade.style.opacity = "1";
+    };
 
     if (selectImage == 1) {
         ci.style.gridColumn = "span 2";
